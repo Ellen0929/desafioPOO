@@ -13,6 +13,14 @@ public class Casa extends Imovel {
     @Override
     public int calcularAluguel(int meses) {
         int valorMes = 1000;
-        return valorMes * meses;
+        int total = valorMes * meses;
+
+        if(meses >= 36){
+            total = total - (total * 10 / 100);
+        } else if(meses >= 24){
+            total = total - (total * 5 / 100);
+        }
+
+        return total;
     }
 }

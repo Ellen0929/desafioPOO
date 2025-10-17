@@ -5,12 +5,14 @@ public abstract class Imovel {
     protected int numero;
     protected boolean alugado;
     protected Proprietario proprietario;
+    protected Inquilino inquilino;
 
     public Imovel(String endereco, int numero, Proprietario proprietario) {
         this.endereco = endereco;
         this.numero = numero;
         this.proprietario = proprietario;
         this.alugado = false;
+        this.inquilino = null;
     }
 
     public String getEndereco() {
@@ -31,6 +33,20 @@ public abstract class Imovel {
 
     public void setAlugado(boolean alugado) {
         this.alugado = alugado;
+    }
+
+    public void alugar(Inquilino i){
+        this.inquilino = i;
+        this.alugado = true;
+    }
+
+    public void desocupar(){
+        this.inquilino = null;
+        this.alugado = false;
+    }
+
+    public Inquilino getInquilino(){
+        return inquilino;
     }
 
     public abstract boolean estaAlugado();

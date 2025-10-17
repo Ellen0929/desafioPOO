@@ -1,7 +1,5 @@
-import modelo.Apartamento;
-import modelo.Imovel;
-import modelo.Proprietario;
-import modelo.Casa;
+import modelo.*;
+import modelo.Inquilino;
 
 import java.util.InputMismatchException;
 import java.util.ArrayList;
@@ -25,6 +23,7 @@ public class Main {
            System.out.println("4- Alugar/Disponiblizar Imóvel");
            System.out.println("5- Calcular Aluguel");
            System.out.println("6- Excluir Imóvel");
+           System.out.println("7- Listar imóveis alugados");
            System.out.println("0 - Sair");
            System.out.println("Escolha uma opção: ");
 
@@ -75,12 +74,24 @@ public class Main {
 
                        System.out.println("Nome do proprietário: ");
                        String nomePropApt = sc.nextLine();
-
+                       while (nomePropApt.matches(".*\\d.*")) {
+                           System.out.print("Erro! Nome inválido. Digite novamente: ");
+                           nomePropApt = sc.nextLine();
+                       }
                        System.out.println("Telefone: ");
                        String telPropApt = sc.nextLine();
+                       while (!telPropApt.matches("\\d+")) {
+                           System.out.print("Erro! Telefone inválido. Digite apenas números: ");
+                           telPropApt = sc.nextLine();
+                       }
+
 
                        System.out.println("CPF: ");
                        String cpfPropApt = sc.nextLine();
+                       while (!cpfPropApt.matches("\\d{11}")) {
+                           System.out.print("Erro! CPF inválido. Digite 11 números: ");
+                           cpfPropApt = sc.nextLine();
+                       }
 
                        Proprietario propApt = new Proprietario(nomePropApt, telPropApt, cpfPropApt);
                        imoveis.add(new Apartamento(endApt, numApt,propApt));
@@ -106,8 +117,21 @@ public class Main {
 
                        if(indice >= 0 && indice < imoveis.size()){
                            Imovel imovel = imoveis.get(indice);
-                           imovel.setAlugado(!imovel.isAlugado());
-                           System.out.println("Status alterado para: " + (imovel.isAlugado() ? "Alugado" : "Disponível"));
+                           if(!imovel.isAlugado()){
+                               System.out.println("Nome do inquilino: ");
+                               String nomeInquilino = sc.nextLine();
+                               System.out.println("Telefone do inquilino: ");
+                               String telInquilino = sc.nextLine();
+                               System.out.println("CPF do inquilino: ");
+                               String cpfInquilino = sc.nextLine();
+
+                               Inquilino inquilino = new Inquilino(nomeInquilino, telInquilino,cpfInquilino);
+                               imovel.alugar(inquilino);
+                               System.out.println("Imóvel alugado com sucesso!");
+                           }else{
+                               imovel.desocupar();
+                               System.out.println("Imóvel alugado com sucesso!");
+                           }
                        }else{
                            System.out.println("Indice inválido");
                        }
@@ -124,6 +148,9 @@ public class Main {
                            Imovel imovel = imoveis.get(idx);
                            int valor = imovel.calcularAluguel(meses);
                            System.out.println("VAlor total do Aluguel: R$ " + valor);
+                           if (meses >= 24) {
+                               System.out.println("Desconto aplicado por aluguel de longa duração!");
+                           }
                        }else{
                            System.out.println("Indice inválido.");
                        }
@@ -138,6 +165,20 @@ public class Main {
                            System.out.println("Imóvel removido com sucesso!!");
                        }else{
                            System.out.println("Indice inválido");
+                       }
+                       break;
+
+                   case 7:
+                       System.out.println(" Imovéis alugados ");
+                       boolean temAlugado = false;
+                       for(Imovel im : imoveis){
+                           if(im.isAlugado()){
+                               System.out.println(im.getEndereco() + " - Inquilino: " + im.getInquilino());
+                               temAlugado = true;
+                           }
+                       }
+                       if(!temAlugado){
+                           System.out.println("Nenhum imóvel alugado no momento.");
                        }
                        break;
 
